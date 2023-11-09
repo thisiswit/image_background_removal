@@ -2,14 +2,20 @@
 
 {% block content %}
 <center>
-    <p class="text">Image Background Removal</p>
-    <p>Upload an image to remove Background
-    <div class="upload-form">
-      <form action = "/uploader" method = "POST" 
-        enctype = "multipart/form-data">
-        <input type = "file" name = "file" />
-        <input type = "submit"/>
-      </form>
-    </div>
+    <h1>Remoção do fundo de imagem</h1>
+    <p>Selecione uma imagem para fazer a remoção ou cole a URL
+    <form 
+      class="content-form"
+      action = "/uploader" 
+      method = "POST" 
+      enctype = "multipart/form-data"
+    >
+      <input class="content-form--input" type="file" name="file"/>
+      <span>ou</span>
+      <input class="content-form--input" placeholder="Cole a URL aqui" name="urlImage" type="url" id="URL">
+      <div class="content-button">
+        <input class="content-form--button" type = "submit"/>
+      </div>
+    </form>
 </center>
 {% endblock %}  

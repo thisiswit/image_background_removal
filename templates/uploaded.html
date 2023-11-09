@@ -2,36 +2,38 @@
 
 {% block content %}
 <!--<p class="text-left">{{ fname }} successfully uploaded.</p>-->
-<div class="row">
-    <div class="col-sm-5">
-        <div class="image-container">
-            <p class="text-center"><b>Imagem Original</b></p>     
-            <a href="/static/uploads/{{ fname }}" target="_new"><img src="/static/uploads/{{ fname }}" class="upload-image-thumb"></a>
+<div class="content-uploader">
+    <div class="content-uploader-image">
+        <div>
+            <p class="content-uploader-image-text"><b>Imagem Original</b></p>     
+            <a href="/static/uploads/{{ fname }}" target="_new"><img src="/static/uploads/{{ fname }}" class="image"></a>
         </div>
-        <div class="upload-form">
-            <p class="text-left">Upload another?</p>
-            <form action = "/uploader" method = "POST" 
-                              enctype = "multipart/form-data">
-                <input type = "file" name = "file" />
-                <input type = "submit"/>
-            </form>
-        </div>      
-    </div>
-    <div class="col-sm-5">
-        <div class="image-container">
-            <p class="text-center"><b>Imagem sem o Background</b></p>
-            <a href="/static/uploads/detected.jpg" target="_new"><img src="/static/uploads/detected.png" class="upload-image-thumb"></a>
+        <div>
+            <p class="content-uploader-image-text"><b>Imagem sem o Background</b></p>
+            <a href="/static/uploads/detected.jpg" target="_new"><img src="/static/uploads/detected.png" class="image"></a>
+        </div>
+        <div>
+            <p class="content-uploader-image-text"><b>Imagem sem o Foreground</b></p>
+            <a href="/static/results/output_{{ x }}.png" target="_new"><img src="/static/results/output_{{ x }}.png" class="image"></a>
         </div>
     </div>
-</div>
-</br>
-
-<div class="row">
-    <div class="col-sm-5">
-        <div class="image-container">
-            <p class="text-center"><b>Imagem sem o Foreground</b></p>
-            <a href="/static/results/output_{{ x }}.png" target="_new"><img src="/static/results/output_{{ x }}.png" class="upload-image-thumb"></a>
-        </div>
-    </div>
+    
+    <div class="content-form-uploader">
+        <h1>Remoção do fundo de imagem</h1>
+        <p>Selecione uma imagem para fazer a remoção ou cole a URL
+        <form 
+          class="content-form"
+          action = "/uploader" 
+          method = "POST" 
+          enctype = "multipart/form-data"
+        >
+          <input class="content-form--input" type="file" name="file"/>
+          <span>ou</span>
+          <input class="content-form--input" placeholder="Cole a URL aqui" name="urlImage" type="url" id="URL">
+          <div class="content-button">
+            <input class="content-form--button" type = "submit"/>
+          </div>
+        </form>
+    </div>      
 </div>
 {% endblock %}
