@@ -24,17 +24,23 @@ def about():
 def upload_file():
     if request.method == 'POST':
         f = request.files['file']
-        # create a secure filename
-        filename = secure_filename(f.filename)
-        print("**************************")
-        print(filename)
-        # save file to /static/uploads
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        print(filepath)
-        f.save(filepath)
-        inference.predict(filepath)
-        print(x)
-        return render_template("uploaded.html", display_detection=filename, fname=filename, x=x)
+        urlImage = request.form['urlImage']
+
+        if f:        
+            filename = secure_filename(f.filename)
+            print("**************************")
+            print(filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            print(filepath)
+            f.save(filepath)
+            inference.predict(filepath)
+            print(x)
+            return render_template("uploaded.html", display_detection=filename, fname=filename, x=x)
+        
+        if urlImage:
+             return render_template("about.html")
+
+        return render_template("index.html")
 
 @app.route('/display/<filename>')
 def display_image(filename):
