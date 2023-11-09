@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import inference
 import os
+from inference import x
 
 application = Flask(__name__) # initializing a flask app
 app=application
@@ -32,7 +33,8 @@ def upload_file():
         print(filepath)
         f.save(filepath)
         inference.predict(filepath)
-        return render_template("uploaded.html", display_detection=filename, fname=filename)
+        print(x)
+        return render_template("uploaded.html", display_detection=filename, fname=filename, x=x)
 
 @app.route('/display/<filename>')
 def display_image(filename):

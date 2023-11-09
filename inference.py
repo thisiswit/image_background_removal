@@ -5,6 +5,7 @@ import onnxruntime
 from PIL import Image
 import datetime
 
+global x
 x = datetime.datetime.now()
 
 model_path = "pretrained/modnet.onnx"
