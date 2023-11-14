@@ -14,7 +14,7 @@
         </div>
         <div>
             <p class="content-uploader-image-text"><b>Imagem sem o Foreground</b></p>
-            <a href="/static/results/output_{{ x }}.png" target="_new"><img src="/static/results/output_{{ x }}.png" class="image"></a>
+            <a href="/static/results/output_{{ date_time }}.png" target="_new"><img src="/static/results/output_{{ date_time }}.png" class="image"></a>
         </div>
     </div>
     
@@ -30,6 +30,9 @@
           <input class="content-form--input" type="file" name="file"/>
           <span>ou</span>
           <input class="content-form--input" placeholder="Cole a URL aqui" name="urlImage" type="url" id="URL">
+          
+          <p class="warning">AVISO: ao preencher os dois campos, será feito a remoção apenas do primeiro input</p>
+
           <div class="content-button">
             <input class="content-form--button" type = "submit"/>
           </div>

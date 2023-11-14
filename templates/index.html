@@ -2,20 +2,29 @@
 
 {% block content %}
 <center>
+  <div class="content-form-index">
     <h1>Remoção do fundo de imagem</h1>
-    <p>Selecione uma imagem para fazer a remoção ou cole a URL
+    {% if  error_image %}
+      <p  class="subtitle">Nenhuma imagem encontrada, tente novamente!</p>
+    {% else %}
+      <p>Selecione uma imagem para fazer a remoção ou cole a URL</p>
+    {% endif %}
     <form 
       class="content-form"
       action = "/uploader" 
       method = "POST" 
       enctype = "multipart/form-data"
     >
-      <input class="content-form--input" type="file" name="file"/>
+      <input class="content-form--input-file" type="file" name="file"/>
       <span>ou</span>
       <input class="content-form--input" placeholder="Cole a URL aqui" name="urlImage" type="url" id="URL">
+      
+      <p class="warning">AVISO: ao preencher os dois campos, será feito a remoção apenas do primeiro input</p>
+      
       <div class="content-button">
-        <input class="content-form--button" type = "submit"/>
+        <input class="content-form--button" id="submit-button" type = "submit"/>
       </div>
     </form>
+  </div>
 </center>
 {% endblock %}  

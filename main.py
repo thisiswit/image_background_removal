@@ -14,7 +14,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", error_image=False)
 
 
 @app.route("/about")
@@ -27,34 +27,26 @@ def upload_file():
     if request.method == 'POST':
         f = request.files['file']
         urlImage = request.form['urlImage']
-        
-        if f and urlImage:
-            return render_template("index-duplicated.html")
 
-        elif f:        
-            filename = secure_filename(f.filename)
-            print("**************************")
-            print(filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            print(filepath)
-            f.save(filepath)
-            inference.predict(filepath)
-            print(x)
-            return render_template("uploaded.html", display_detection=filename, fname=filename, x=x)
+        render_template("index.html", error_image=False, loading=True)
         
-        elif urlImage:
-            fname = urlImage.split("/")[-1]
-            path = f"static/uploads/{fname}"
-            urllib.request.urlretrieve(urlImage, path)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], fname)
-            inference.predict(filepath)
-            return render_template("uploaded.html", display_detection=path, fname=fname, x=x)
+        if f or urlImage: 
+            if f:        
+                filename = secure_filename(f.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                f.save(filepath)
+                inference.predict(filepath)
+                return render_template("uploaded.html", display_detection=filename, fname=filename, date_time=x)
+            
+            else:
+                fname = urlImage.split("/")[-1]
+                path = f"static/uploads/{fname}"
+                urllib.request.urlretrieve(urlImage, path)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], fname)
+                inference.predict(filepath)
+                return render_template("uploaded.html", display_detection=path, fname=fname, date_time=x)
         
-        return render_template("index-error.html")
-
-@app.route('/display/<filename>')
-def display_image(filename):
-	return redirect(url_for('static', filename='uploads/' + filename), code=301)
+        return render_template("index.html", error_image=True)
 
 # Removendo o cache dos endpoints.
 @app.after_request

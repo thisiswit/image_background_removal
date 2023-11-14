@@ -1,8 +1,4 @@
-/*
- * General
- */
-
- * {
+* {
   margin: 0;
  }
 
@@ -12,18 +8,15 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-
-
-
-/*
- * Header
- */
-
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #0f70b7;
+  width: 100%;
+  position: fixed;
+  top: 0;
+
 }
 
 .header-title {
@@ -38,17 +31,36 @@ header {
 .container {
   display: flex;
   justify-content: center;
-  padding: 50px;
+  align-items: center;
+  min-height: 100vh;
+  max-width: 100%;
+  overflow-y: scroll;
+}
+
+.subtitle {
+  color: rgb(176, 23, 23);
 }
 
 .content-form {
   display: flex;
   flex-direction: column;
+  justify-items: center;
 }
 
 .content-form--input {
   margin: 20px;
   font-size: 16px;
+}
+
+.content-form--input-file {
+  margin: 20px 20px 10px !important;
+  font-size: 16px;
+}
+
+.warning {
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .content-button {
@@ -79,6 +91,23 @@ header {
 .content-uploader {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-form-uploader {
+  margin-top: 50px;
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.content-form-index {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 10px;
+  border-radius: 8px;
 }
 
 .content-uploader-image {
@@ -94,6 +123,35 @@ header {
   margin: 0 20px;
 }
 
-.content-form-uploader {
-  margin-top: 50px;
+span, h1, p {
+  text-align: center;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 98%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0f70b7;
+  padding: 20px;
+}
+
+.footer-button {
+  color: #fff;
+  background: #0f70b7;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 18px;
+
+  &:hover {
+    background-color: #1c89ff;
+    border-color: #fff;
+    transition: all .1s ease-in-out;
+  }
 }
