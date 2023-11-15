@@ -10,17 +10,17 @@
         </div>
         <div>
             <p class="content-uploader-image-text"><b>Imagem sem o Background</b></p>
-            <a href="/static/uploads/detected.jpg" target="_new"><img src="/static/uploads/detected.png" class="image"></a>
+            <a href="/static/uploads/detected.png" target="_new"><img src="/static/uploads/detected.png" class="image"></a>
         </div>
         <div>
-            <p class="content-uploader-image-text"><b>Imagem sem o Foreground</b></p>
+            <p class="content-uploader-image-text"><b>Segmentação da imagem</b></p>
             <a href="/static/results/output_{{ date_time }}.png" target="_new"><img src="/static/results/output_{{ date_time }}.png" class="image"></a>
         </div>
     </div>
     
     <div class="content-form-uploader">
         <h1>Remoção do fundo de imagem</h1>
-        <p>Selecione uma imagem para fazer a remoção ou cole a URL
+        <span>Selecione uma imagem para fazer a remoção ou cole a URL</span>
         <form 
           class="content-form"
           action = "/uploader" 
@@ -31,7 +31,7 @@
           <span>ou</span>
           <input class="content-form--input" placeholder="Cole a URL aqui" name="urlImage" type="url" id="URL">
           
-          <p class="warning">AVISO: ao preencher os dois campos, será feito a remoção apenas do primeiro input</p>
+          <span class="warning">AVISO: ao preencher os dois campos, será feito a remoção apenas do primeiro input</span>
 
           <div class="content-button">
             <input class="content-form--button" type = "submit"/>

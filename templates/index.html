@@ -5,9 +5,9 @@
   <div class="content-form-index">
     <h1>Remoção do fundo de imagem</h1>
     {% if  error_image %}
-      <p  class="subtitle">Nenhuma imagem encontrada, tente novamente!</p>
+      <span  class="subtitle">Nenhuma imagem encontrada, tente novamente!</span>
     {% else %}
-      <p>Selecione uma imagem para fazer a remoção ou cole a URL</p>
+      <span>Selecione uma imagem para fazer a remoção ou cole a URL</span>
     {% endif %}
     <form 
       class="content-form"
@@ -19,7 +19,7 @@
       <span>ou</span>
       <input class="content-form--input" placeholder="Cole a URL aqui" name="urlImage" type="url" id="URL">
       
-      <p class="warning">AVISO: ao preencher os dois campos, será feito a remoção apenas do primeiro input</p>
+      <span class="warning">AVISO: ao preencher os dois campos, será feito a remoção apenas do primeiro input</span>
       
       <div class="content-button">
         <input class="content-form--button" id="submit-button" type = "submit"/>

@@ -93,3 +93,60 @@ def predict(image_path):
     matte = Image.fromarray(matte)
     im_PIL.putalpha(matte)   # add alpha channel to keep transparency
     im_PIL.save('static/uploads/detected.png')
+
+    def resize_image(input_path, novo_tamanho, by_width):
+        image = Image.open(input_path)
+
+        width, height = image.size
+        if by_width:
+            new_width = novo_tamanho
+            new_height = int((novo_tamanho / width) * height)
+        else:
+            new_width = int((novo_tamanho / height) * width)
+            new_height = novo_tamanho
+
+        resized = image.resize((new_width, new_height))
+
+        resized.save(input_path)
+
+
+    def adjust_images(images):
+        open_images = [Image.open(image) for image in images]
+
+        image_base_height, image_base_width = open_images[0].size
+        image_sup_height, image_sup_width = open_images[1].size
+
+
+        if image_sup_width > image_base_width:
+            resize_image(images[1], image_base_width, False)
+        if image_sup_height > image_base_height:
+            resize_image(images[0], image_sup_height, True)
+
+
+    def merge_images(images):
+        open_images = [Image.open(image).convert("RGBA") for image in images]
+
+        max_width_images = max(image.width for image in open_images)
+        max_height_images = max(image.height for image in open_images)
+
+        result = Image.new('RGBA', (max_width_images, max_height_images), (0, 0, 0, 0))
+
+        image_base_width, image_base_height = open_images[0].size
+
+        x_center = (image_base_width - open_images[1].width) // 2
+        y_center = (image_base_height - open_images[1].height)
+
+
+        result.paste(open_images[0], (0, 0), open_images[0])
+        result.paste(open_images[1], (x_center, y_center), open_images[1])
+
+        result.save(exit_path)
+
+    image_base_path = "static/logo/MODnet.png"
+    image_sub_path = "static/uploads/detected.png"
+    exit_path = "static/uploads/saida.png"    
+    images = [image_base_path, image_sub_path]
+
+    adjust_images(images)
+    merge_images(images)
+    

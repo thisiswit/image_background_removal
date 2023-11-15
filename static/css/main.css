@@ -32,9 +32,8 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 92vh;
   max-width: 100%;
-  overflow-y: scroll;
 }
 
 .subtitle {
@@ -93,6 +92,7 @@ header {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 100px 0 50px;
 }
 
 .content-form-uploader {
@@ -123,15 +123,11 @@ header {
   margin: 0 20px;
 }
 
-span, h1, p {
+span, h1 {
   text-align: center;
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 98%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -154,4 +150,40 @@ footer {
     border-color: #fff;
     transition: all .1s ease-in-out;
   }
+}
+
+.content-about {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 150px 150px 50px;
+}
+
+.content-about-title {
+margin-bottom: 20px;
+}
+
+.content-about-model {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.content-about-model-p {
+  text-indent: 1.5em;
+  line-height: 160%;
+  font-size: 18px;
+  width: 100%;
+}
+
+.content-about-model-image {
+  margin: 50px 0;
+}
+
+.content-about-model-subtitle {
+  padding: 10px 0;
+  width: 100%;
 }

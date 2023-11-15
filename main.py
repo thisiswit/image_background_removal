@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import inference
 import os
-import requests
+from PIL import Image
 import urllib.request 
 from inference import x
 
@@ -28,14 +28,16 @@ def upload_file():
         f = request.files['file']
         urlImage = request.form['urlImage']
 
+
         render_template("index.html", error_image=False, loading=True)
         
-        if f or urlImage: 
+        if f or urlImage:
             if f:        
                 filename = secure_filename(f.filename)
                 filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 f.save(filepath)
                 inference.predict(filepath)
+
                 return render_template("uploaded.html", display_detection=filename, fname=filename, date_time=x)
             
             else:
@@ -45,7 +47,7 @@ def upload_file():
                 filepath = os.path.join(app.config['UPLOAD_FOLDER'], fname)
                 inference.predict(filepath)
                 return render_template("uploaded.html", display_detection=path, fname=fname, date_time=x)
-        
+
         return render_template("index.html", error_image=True)
 
 # Removendo o cache dos endpoints.
