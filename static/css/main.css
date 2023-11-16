@@ -44,6 +44,10 @@ header {
   display: flex;
   flex-direction: column;
   justify-items: center;
+  margin: 80px 80px 40px 80px;
+  background-color: #fff;
+  padding: 45px;
+  border-radius: 8px;
 }
 
 .content-form--input {
@@ -78,7 +82,7 @@ header {
   cursor: pointer;
   transition: all .1s ease-in-out;
   padding: 10px;
-  width: 100px;
+  width: 200px;
 
   &:hover {
     background-color: #1c89ff;
@@ -97,17 +101,15 @@ header {
 
 .content-form-uploader {
   margin-top: 50px;
-  background-color: #fff;
-  padding: 20px;
-  margin-bottom: 10px;
-  border-radius: 8px;
 }
 
 .content-form-index {
-  background-color: #fff;
-  padding: 20px;
-  margin-bottom: 10px;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-form-cards {
+  display: flex;
 }
 
 .content-uploader-image {

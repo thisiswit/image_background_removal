@@ -22,24 +22,24 @@ def predict(image_path):
     ref_size = 512
 
     # Get x_scale_factor & y_scale_factor to resize image
-    def get_scale_factor(im_h, im_w, ref_size):
+    def get_scale_factor(im_height, im_width, ref_size):
 
-        if max(im_h, im_w) < ref_size or min(im_h, im_w) > ref_size:
-            if im_w >= im_h:
+        if max(im_height, im_width) < ref_size or min(im_height, im_width) > ref_size:
+            if im_width >= im_height:
                 im_rh = ref_size
-                im_rw = int(im_w / im_h * ref_size)
-            elif im_w < im_h:
+                im_rw = int(im_width / im_height * ref_size)
+            elif im_width < im_height:
                 im_rw = ref_size
-                im_rh = int(im_h / im_w * ref_size)
+                im_rh = int(im_height / im_width * ref_size)
         else:
-            im_rh = im_h
-            im_rw = im_w
+            im_rh = im_height
+            im_rw = im_width
 
         im_rw = im_rw - im_rw % 32
         im_rh = im_rh - im_rh % 32
 
-        x_scale_factor = im_rw / im_w
-        y_scale_factor = im_rh / im_h
+        x_scale_factor = im_rw / im_width
+        y_scale_factor = im_rh / im_height
 
         return x_scale_factor, y_scale_factor
 
@@ -62,8 +62,8 @@ def predict(image_path):
     # normalize values to scale it between -1 to 1
     im = (im - 127.5) / 127.5
 
-    im_h, im_w, im_c = im.shape
-    x, y = get_scale_factor(im_h, im_w, ref_size)
+    im_heigth, im_width, im_c = im.shape
+    x, y = get_scale_factor(im_heigth, im_width, ref_size)
 
     # resize image
     im = cv2.resize(im, None, fx = x, fy = y, interpolation = cv2.INTER_AREA)
@@ -81,7 +81,7 @@ def predict(image_path):
 
     # refine matte
     matte = (np.squeeze(result[0]) * 255).astype('uint8')
-    matte = cv2.resize(matte, dsize=(im_w, im_h), interpolation = cv2.INTER_AREA)
+    matte = cv2.resize(matte, dsize=(im_width, im_heigth), interpolation = cv2.INTER_AREA)
 
     cv2.imwrite(output_path, matte)
 
@@ -94,59 +94,59 @@ def predict(image_path):
     im_PIL.putalpha(matte)   # add alpha channel to keep transparency
     im_PIL.save('static/uploads/detected.png')
 
-    def resize_image(input_path, novo_tamanho, by_width):
-        image = Image.open(input_path)
+    def resize_image(image_path, new_size, by_width):
+        im = Image.open(image_path)
 
-        width, height = image.size
+        width, height = im.size
         if by_width:
-            new_width = novo_tamanho
-            new_height = int((novo_tamanho / width) * height)
+            new_width = new_size
+            new_heigth = int((new_size / width) * height)
         else:
-            new_width = int((novo_tamanho / height) * width)
-            new_height = novo_tamanho
+            new_width = int((new_size / height) * width)
+            new_heigth = new_size
 
-        resized = image.resize((new_width, new_height))
+        resized = im.resize((new_width, new_heigth))
 
-        resized.save(input_path)
-
-
-    def adjust_images(images):
-        open_images = [Image.open(image) for image in images]
-
-        image_base_height, image_base_width = open_images[0].size
-        image_sup_height, image_sup_width = open_images[1].size
+        resized.save(image_path)
 
 
-        if image_sup_width > image_base_width:
-            resize_image(images[1], image_base_width, False)
-        if image_sup_height > image_base_height:
-            resize_image(images[0], image_sup_height, True)
+    def adjust_images(imgs):
+        open_im = [Image.open(image) for image in imgs]
+
+        im_base_h, im_base_w = open_im[0].size
+        im_sup_h, im_sup_w = open_im[1].size
 
 
-    def merge_images(images):
-        open_images = [Image.open(image).convert("RGBA") for image in images]
-
-        max_width_images = max(image.width for image in open_images)
-        max_height_images = max(image.height for image in open_images)
-
-        result = Image.new('RGBA', (max_width_images, max_height_images), (0, 0, 0, 0))
-
-        image_base_width, image_base_height = open_images[0].size
-
-        x_center = (image_base_width - open_images[1].width) // 2
-        y_center = (image_base_height - open_images[1].height)
+        if im_sup_w > im_base_w:
+            resize_image(imgs[1], im_base_w, False)
+        if im_sup_h > im_base_h:
+            resize_image(imgs[0], im_sup_h, True)
 
 
-        result.paste(open_images[0], (0, 0), open_images[0])
-        result.paste(open_images[1], (x_center, y_center), open_images[1])
+    def merge_images(imgs):
+        open_im = [Image.open(img).convert("RGBA") for img in imgs]
+
+        max_w_img = max(img.width for img in open_im)
+        max_h_im = max(img.height for img in open_im)
+
+        result = Image.new('RGBA', (max_w_img, max_h_im), (0, 0, 0, 0))
+
+        im_base_w, im_base_h = open_im[0].size
+
+        x_center = (im_base_w - open_im[1].width) // 2
+        y_center = (im_base_h - open_im[1].height)
+
+
+        result.paste(open_im[0], (0, 0), open_im[0])
+        result.paste(open_im[1], (x_center, y_center), open_im[1])
 
         result.save(exit_path)
 
-    image_base_path = "static/logo/MODnet.png"
-    image_sub_path = "static/uploads/detected.png"
+    im_base_path = "static/uploads/background.png"
+    im_sub_path = "static/uploads/detected.png"
     exit_path = "static/uploads/saida.png"    
-    images = [image_base_path, image_sub_path]
+    imgs = [im_base_path, im_sub_path]
 
-    adjust_images(images)
-    merge_images(images)
+    adjust_images(imgs)
+    merge_images(imgs)
     

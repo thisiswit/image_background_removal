@@ -3,14 +3,15 @@ from werkzeug.utils import secure_filename
 import inference
 import os
 from PIL import Image
-import urllib.request 
 from inference import x
+import io
+import requests
 
 application = Flask(__name__)
 app=application
 UPLOAD_FOLDER = 'static/uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
 
 @app.route("/")
 def index():
@@ -25,30 +26,45 @@ def about():
 @app.route('/uploader', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        f = request.files['file']
+        file = request.files['file']
         urlImage = request.form['urlImage']
+        fileBackground = request.files['fileBackground']
+        urlBackground = request.form['urlImageBackground']
 
-
-        render_template("index.html", error_image=False, loading=True)
-        
-        if f or urlImage:
-            if f:        
-                filename = secure_filename(f.filename)
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                f.save(filepath)
-                inference.predict(filepath)
-
-                return render_template("uploaded.html", display_detection=filename, fname=filename, date_time=x)
+        if fileBackground or urlBackground and file or urlImage:
+            if fileBackground or urlBackground:
+                if fileBackground:
+                    imagem = Image.open(io.BytesIO(fileBackground.read()))
+                
+                else:
+                    response = requests.get(urlBackground)
+                    imagem = Image.open(io.BytesIO(response.content))
+                
+                backgroundPath = os.path.join(app.config['UPLOAD_FOLDER'], 'background.png')
+                imagem.save(backgroundPath, format='PNG')
             
-            else:
-                fname = urlImage.split("/")[-1]
-                path = f"static/uploads/{fname}"
-                urllib.request.urlretrieve(urlImage, path)
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'], fname)
-                inference.predict(filepath)
-                return render_template("uploaded.html", display_detection=path, fname=fname, date_time=x)
+            if file or urlImage:
+                if file:
+                    imagem = Image.open(io.BytesIO(file.read()))
+                
+                else:
+                    response = requests.get(urlImage)
+                    imagem = Image.open(io.BytesIO(response.content))
+                
+                imagePath = os.path.join(app.config['UPLOAD_FOLDER'], 'image.png')
+                imagem.save(imagePath, format='PNG')
+                inference.predict(imagePath)
 
-        return render_template("index.html", error_image=True)
+                return render_template("uploaded.html", date_time=x)
+            
+        if fileBackground or urlBackground:
+            error= 'Nenhuma imagem para remoção do fundo encontrada, tente novamente!'
+        elif file or urlImage:
+            error= 'Nenhuma imagem de background encontrada, tente novamente!'
+        else:
+            error= 'Nenhuma imagem encontrada, tente novamente!'
+
+        return render_template("index.html", error_image=True, error=error)
 
 # Removendo o cache dos endpoints.
 @app.after_request
