@@ -6,7 +6,7 @@
     <div class="content-uploader-image">
         <div>
             <p class="content-uploader-image-text"><b>Imagem Original</b></p>     
-            <a href="/static/uploads/{{ fname }}" target="_new"><img src="/static/uploads/{{ fname }}" class="image"></a>
+            <a href="/static/uploads/image.png" target="_new"><img src="/static/uploads/image.png" class="image"></a>
         </div>
         <div>
             <p class="content-uploader-image-text"><b>Imagem sem o Background</b></p>
@@ -16,27 +16,50 @@
             <p class="content-uploader-image-text"><b>Segmentação da imagem</b></p>
             <a href="/static/results/output_{{ date_time }}.png" target="_new"><img src="/static/results/output_{{ date_time }}.png" class="image"></a>
         </div>
+        <div>
+          <p class="content-uploader-image-text"><b>Junção das imagens</b></p>
+          <a href="/static/uploads/saida.png" target="_new"><img src="/static/uploads/saida.png" class="image"></a>
+        </div>
     </div>
     
-    <div class="content-form-uploader">
+    <form 
+    class="content-form-index"
+    action = "/uploader" 
+    method = "POST" 
+    enctype = "multipart/form-data"
+  >
+    <div class="content-form-cards">
+      <div class="content-form">
         <h1>Remoção do fundo de imagem</h1>
-        <span>Selecione uma imagem para fazer a remoção ou cole a URL</span>
-        <form 
-          class="content-form"
-          action = "/uploader" 
-          method = "POST" 
-          enctype = "multipart/form-data"
-        >
-          <input class="content-form--input" type="file" name="file"/>
+        {% if  error_image %}
+          <span  class="subtitle">{{ error }}</span>
+        {% else %}
+          <span>Selecione uma imagem para fazer a remoção ou cole a URL</span>
+        {% endif %}
+          <input class="content-form--input-file" type="file" name="file"/>
           <span>ou</span>
           <input class="content-form--input" placeholder="Cole a URL aqui" name="urlImage" type="url" id="URL">
           
           <span class="warning">AVISO: ao preencher os dois campos, será feito a remoção apenas do primeiro input</span>
+      </div>
 
-          <div class="content-button">
-            <input class="content-form--button" type = "submit"/>
-          </div>
-        </form>
-    </div>      
+      <div class="content-form">
+        <h1>Adição do backgroud</h1>
+        {% if  error_image %}
+          <span  class="subtitle">{{ error }}</span>
+        {% else %}
+          <span>Selecione uma imagem para o background ou cole a URL</span>
+        {% endif %}
+          <input class="content-form--input-file" type="file" name="fileBackground"/>
+          <span>ou</span>
+          <input class="content-form--input" placeholder="Cole a URL aqui" name="urlImageBackground" type="url" id="URL">
+          
+          <span class="warning">AVISO: ao preencher os dois campos, será feito a remoção apenas do primeiro input</span>
+      </div>
+    </div>
+      <div class="content-button">
+        <input class="content-form--button" id="submit-button" type = "submit"/>
+      </div>
+  </form>   
 </div>
 {% endblock %}
