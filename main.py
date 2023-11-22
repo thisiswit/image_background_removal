@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import inference
 import os
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from inference import x
 import io
 import requests
@@ -34,26 +34,43 @@ def upload_file():
         if fileBackground or urlBackground and file or urlImage:
             if fileBackground or urlBackground:
                 if fileBackground:
-                    imagem = Image.open(io.BytesIO(fileBackground.read()))
+                    imagem = io.BytesIO(fileBackground.read())
                 
                 else:
                     response = requests.get(urlBackground)
-                    imagem = Image.open(io.BytesIO(response.content))
+                    imagem = io.BytesIO(response.content)
                 
-                backgroundPath = os.path.join(app.config['UPLOAD_FOLDER'], 'background.png')
-                imagem.save(backgroundPath, format='PNG')
+                try:
+                    imagemOpen = Image.open(imagem)
+                    backgroundPath = os.path.join(app.config['UPLOAD_FOLDER'], 'background.png')
+                    imagemOpen.save(backgroundPath, format='PNG')
+                except UnidentifiedImageError:
+                    error = "Não foi possível identificar o arquivo de imagem de background."
+                    return render_template("index.html", error_image=True, error=error)
+                except Exception as e:
+                    error = (f"Não foi possível identificar o arquivo de imagem de background: {e}")
+                    return render_template("index.html", error_image=True, error=error)
+
             
             if file or urlImage:
                 if file:
-                    imagem = Image.open(io.BytesIO(file.read()))
+                    imagem = io.BytesIO(file.read())
                 
                 else:
                     response = requests.get(urlImage)
-                    imagem = Image.open(io.BytesIO(response.content))
-                
-                imagePath = os.path.join(app.config['UPLOAD_FOLDER'], 'image.png')
-                imagem.save(imagePath, format='PNG')
-                inference.predict(imagePath)
+                    imagem = io.BytesIO(response.content)
+
+                try:
+                    imagemOpen = Image.open(imagem)
+                    imagePath = os.path.join(app.config['UPLOAD_FOLDER'], 'image.png')
+                    imagemOpen.save(imagePath, format='PNG')
+                    inference.predict(imagePath)
+                except UnidentifiedImageError:
+                    error = "Não foi possível identificar o arquivo de imagem de remoção do fundo."
+                    return render_template("index.html", error_image=True, error=error)
+                except Exception as e:
+                    error = (f"Não foi possível identificar o arquivo de imagem de background: {e}")
+                    return render_template("index.html", error_image=True, error=error)
 
                 return render_template("uploaded.html", date_time=x)
             
