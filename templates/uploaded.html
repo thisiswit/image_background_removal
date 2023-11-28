@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<!--<p class="text-left">{{ fname }} successfully uploaded.</p>-->
 <div class="content-uploader">
     <div class="content-uploader-image">
         <div>
@@ -9,12 +8,12 @@
             <a href="/static/uploads/image.png" target="_new"><img src="/static/uploads/image.png" class="image"></a>
         </div>
         <div>
-            <p class="content-uploader-image-text"><b>Imagem sem o Background</b></p>
-            <a href="/static/uploads/detected.png" target="_new"><img src="/static/uploads/detected.png" class="image"></a>
-        </div>
-        <div>
             <p class="content-uploader-image-text"><b>Segmentação da imagem</b></p>
             <a href="/static/results/output_{{ date_time }}.png" target="_new"><img src="/static/results/output_{{ date_time }}.png" class="image"></a>
+        </div>
+        <div>
+            <p class="content-uploader-image-text"><b>Imagem sem o Background</b></p>
+            <a href="/static/uploads/detected.png" target="_new"><img src="/static/uploads/detected.png" class="image"></a>
         </div>
         <div>
           <p class="content-uploader-image-text"><b>Junção das imagens</b></p>
